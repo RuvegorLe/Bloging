@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+require("dotenv").config();
 
 const userRoute = require("./routes/user");
 const blogRoute = require("./routes/blog");
@@ -11,13 +12,14 @@ const Blog = require("./models/blog");
 
 const app = express();
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 mongoose
-  .connect("mongodb+srv://lequangvu0410:TYwFSoAL6iBx8F4b@cluster0.5nkafmb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("Connection error:", err));
 
+// Cài đặt view engine  
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
