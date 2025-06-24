@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head.ejs') %>
+    <title>Vule Blogs</title>
+    <style>
+      .row.row-cols-3 .col {
+        margin-bottom: 20px; /* Adds gap between rows */
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        width: 100%; /* Full width to fit column */
+        max-width: 20rem; /* Max card width */
+        border: 2px solid #16a085;
+      }
+
+      .card-img-top {
+        width: 100%;
+        height: 12rem; /* 75% of card height */
+        object-fit: cover; /* Ensures the image covers the area */
+      }
+
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 8rem; /* 25% of card height */
+        padding: 10px; /* Adjust padding as needed */
+        border-top: 2px solid #16a085;
+      }
+
+      .btn {
+        background: #12876f;
+        color: white;
+        text-decoration: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+      }
+
+      .btn:hover {
+        border: 2px solid #0e6c5e;
+        background-color: rgb(246, 244, 240);
+      }
+
+      .no-blogs {
+        height: 150px;
+        background: #16a085;
+        border-radius: 5px 5px 0 0;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .title-section {
+        height: 90px;
+        background: #16a085;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/nav.ejs') %>
+    <div class="container mt-3">
+      <div class="title-section">🌄 Chuyện kể Ngũ Hành Sơn	</div>
+      <% if (blogs.length === 0) { %>
+      <p class="no-blogs">
+        😔 Xin lỗi, hiện đang không có sẵn thông tin nào. 😔<br /><br />Hãy giới thiệu những danh lam thắng cảnh tại Ngũ Hành Sơn mà bạn biết
+      </p>
+      <% } else { %>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+        <% blogs.forEach(blog => { %>
+        <div class="col mb-4">
+          <div class="card">
+            <img
+              class="card-img-top"
+              src="<%= blog.coverImageURL %>"
+              alt="Card image cap"
+            />
+            <div class="card-body">
+              <h5 class="card-title"><%= blog.title %></h5>
+              <a href="/blog/<%= blog._id %>" class="btn">Chi tiết</a>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+
+    <%- include('partials/scripts.js') %>
+  </body>
+</html>

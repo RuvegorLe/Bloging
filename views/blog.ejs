@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head.ejs') %>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    />
+    <title>🌄 Chuyện kể Ngũ Hành Sơn	</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        background: #f2f2f2;
+        max-width: 100%;
+        margin: 20px auto;
+        overflow-x: hidden; /* Ensure no horizontal scroll */
+      }
+      .container {
+        max-width: 800px;
+        padding: 0 20px;
+        margin: 20px auto;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
+      }
+      .container img {
+        width: 100%;
+        max-width: 700px; /* Ensure the image does not exceed the container width */
+        height: auto;
+        display: block;
+        margin: 10px 0;
+      }
+      h1 {
+        height: 90px;
+        background: #16a085;
+        border-radius: 5px 5px 0 0;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+      .comments-section {
+        margin-top: 30px;
+      }
+      .comments-section h1 {
+        font-size: 20px;
+        font-weight: 600;
+      }
+      .comments-section form {
+        margin-bottom: 20px;
+      }
+      .comments-section form .form-control {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 5px;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        outline: none;
+        transition: border 0.3s ease;
+      }
+      .comments-section form .form-control:focus {
+        border-color: #16a085;
+        box-shadow: inset 0px 0px 2px 2px rgba(26, 188, 156, 0.25);
+      }
+      .btn {
+        width: 100%;
+        height: 45px;
+        background: #16a085;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 500;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #12876f;
+      }
+      .comment {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        background: #fafafa;
+      }
+      .comment img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+      .comment .comment-content {
+        display: flex;
+        align-items: center;
+      }
+      .comment .comment-text {
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/nav.ejs') %>
+    <div class="container mt-4">
+      <h1><%= blog.title %></h1>
+      <div class="container mt-4">
+        <img
+          src="<%= blog.createdBy.profileImageUrl %>"
+          alt="Blog Cover Image"
+          style="
+            width: 40px;
+            display: inline;
+            border: 2px solid #12876f;
+            border-radius: 20px;
+          "
+        />
+
+        <span style="margin-left: 15px">
+          <b>Tác giả:</b> <%= blog.createdBy.fullName %></span
+        >
+        <span style="margin-left: 15px">
+          <b>Đăng lúc: </b> <%=
+          blog.createdBy.createdAt.toLocaleString('en-US', { weekday: 'long',
+          month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'
+          }) %></span
+        >
+      </div>
+      <img src="/<%= blog.coverImageURL %>" alt="Blog Cover Image" />
+      <pre id="contents"><%- blog.body %></pre>
+    </div>
+
+    <div class="container mt-3 comments-section">
+      <h1>Bình luận (<%= comments.length %>)</h1>
+
+      <% if (locals.user) { %>
+      <form action="/blog/comment/<%= blog._id %>" method="post">
+        <div class="mb-3">
+          <input
+            type="text"
+            class="form-control"
+            name="content"
+            placeholder="Enter your comment"
+          />
+        </div>
+        <button type="submit" class="btn">Thêm bình luận</button>
+      </form>
+      <div class="mt-3">
+        <% comments.forEach(comment => { %>
+
+        <div class="comment">
+          <div class="comment-content">
+            <img
+              src="<%= comment.createdBy.profileImageUrl %>"
+              alt="Profile Image"
+            />
+            <div class="comment-text">
+              <strong><%= comment.createdBy.fullName %>:</strong> <%=
+              comment.content %>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+    </div>
+    <%- include('partials/scripts.js') %>
+  </body>
+</html>

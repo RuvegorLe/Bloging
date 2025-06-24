@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head.ejs') %>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    />
+    <title>Blog</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        background: #f2f2f2;
+        max-width: 100%;
+        margin: 20px auto;
+        overflow-x: hidden; /* Ensure no horizontal scroll */
+      }
+      .container {
+        max-width: 800px;
+        padding: 0 20px;
+        margin: 20px auto;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
+      }
+      .container img {
+        width: 100%;
+        max-width: 700px; /* Ensure the image does not exceed the container width */
+        height: auto;
+        display: block;
+        margin: 10px 0;
+      }
+      h1 {
+        height: 90px;
+        background: #16a085;
+        border-radius: 5px 5px 0 0;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      .btn {
+        width: 100%;
+        height: 45px;
+        background: #16a085;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 500;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #12876f;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/nav.ejs') %>
+    <div class="container mt-4">
+      <h1 id="blog-title"><%= blog.title %></h1>
+      <div class="container mt-4">
+        <img
+          src="<%= blog.createdBy.profileImageUrl %>"
+          alt="Blog Cover Image"
+          style="
+            width: 40px;
+            display: inline;
+            border: 2px solid #12876f;
+            border-radius: 20px;
+          "
+        />
+
+        <span style="margin-left: 15px">
+          <b>Tác giả:</b> <%= blog.createdBy.fullName %></span
+        >
+        <span style="margin-left: 15px">
+          <b>Đăng lúc: </b> <%=
+          blog.createdBy.createdAt.toLocaleString('en-US', { weekday: 'long',
+          month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'
+          }) %></span
+        >
+      </div>
+      <img src="/<%= blog.coverImageURL %>" alt="Blog Cover Image" />
+      <pre id="contents"><%- blog.body %></pre>
+      <button class="btn" id="edit-btn">Chỉnh sửa</button>
+      <button class="btn" id="update-btn" style="display: none">Cập nhật</button>
+    </div>
+
+    <script>
+      const editButton = document.getElementById("edit-btn");
+      const updateButton = document.getElementById("update-btn");
+      const titleElement = document.getElementById("blog-title");
+      const contentsElement = document.getElementById("contents");
+
+      // Replace ':id' with the actual blog ID
+      const blogId = "<%= blog._id %>";
+
+      editButton.addEventListener("click", () => {
+        titleElement.contentEditable = "true";
+        contentsElement.contentEditable = "true";
+        titleElement.style.border = "1px solid #ddd";
+        contentsElement.style.border = "1px solid #ddd";
+        editButton.style.display = "none";
+        updateButton.style.display = "block";
+      });
+
+      updateButton.addEventListener("click", async () => {
+        titleElement.contentEditable = "false";
+        contentsElement.contentEditable = "false";
+        titleElement.style.border = "none";
+        contentsElement.style.border = "none";
+        editButton.style.display = "block";
+        updateButton.style.display = "none";
+
+        // Prepare data to be sent in the request
+        const updatedTitle = titleElement.innerText;
+        const updatedBody = contentsElement.innerHTML;
+        console.log(
+          "i am a an updatedTitle" +
+            updatedTitle +
+            "i am a updated body" +
+            updatedBody
+        );
+
+        try {
+          const response = await fetch(`/blog/update/${blogId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title: updatedTitle,
+              body: updatedBody,
+            }),
+          });
+
+          if (response.ok) {
+            alert("Update Successful");
+          } else {
+            alert("Update Failed");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("An error occurred while updating the blog.");
+        }
+      });
+    </script>
+
+    <%- include('partials/scripts.js') %>
+  </body>
+</html>

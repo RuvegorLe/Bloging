@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/head.ejs') %>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    />
+    <title>Vule Blogs</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        background: #f2f2f2;
+        max-width: 100%;
+        margin: 20px auto;
+      }
+      .container {
+        max-width: 800px;
+        padding: 0 20px;
+        margin: 50px auto;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
+      }
+      .title {
+        height: 90px;
+        background: #16a085;
+        border-radius: 5px 5px 0 0;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      form {
+        padding: 30px 25px 25px 25px;
+      }
+      form .mb-3 {
+        margin-bottom: 15px;
+      }
+      form label {
+        font-size: 16px;
+        font-weight: 500;
+      }
+      form input,
+      form textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 5px;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        outline: none;
+        transition: border 0.3s ease;
+      }
+      form input:focus,
+      form textarea:focus {
+        border-color: #16a085;
+        box-shadow: inset 0px 0px 2px 2px rgba(26, 188, 156, 0.25);
+      }
+      form input::placeholder,
+      form textarea::placeholder {
+        color: #999;
+      }
+      .btn {
+        width: 100%;
+        height: 45px;
+        background: #16a085;
+        color: #fff;
+        font-size: 18px;
+        font-weight: 500;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: #12876f;
+      }
+      #toolbar-container {
+        margin-bottom: 10px;
+      }
+      .ck-editor__editable {
+        min-height: 300px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('partials/nav.ejs') %>
+    <div class="container">
+      <div class="title"><span>Đóng góp bài viết mới</span></div>
+      <form action="/blog" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="coverImage" class="form-label">Hình ảnh</label>
+          <input
+            type="file"
+            class="form-control"
+            id="coverImage"
+            name="coverImage"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="title" class="form-label">Tiêu đề</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            placeholder="Enter title"
+          />
+        </div>
+        <div id="toolbar-container"></div>
+        <div class="mb-3" id="editor">
+          <label for="body" class="form-label">Mô tả chi tiết</label>
+          <textarea name="body" id="editor-content" hidden></textarea>
+          <div id="editor-div"></div>
+        </div>
+        <div class="mb-3">
+          <button class="btn" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+    <%- include('partials/scripts.js') %>
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/decoupled-document/ckeditor.js"></script>
+    <script>
+      DecoupledEditor.create(document.querySelector("#editor-div"))
+        .then((editor) => {
+          const toolbarContainer = document.querySelector("#toolbar-container");
+          toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+
+          const form = document.querySelector("form");
+          form.addEventListener("submit", () => {
+            document.querySelector("#editor-content").value = editor.getData();
+          });
+        })
+        .catch((error) => {
+          console.error("There was an error initializing the editor: ", error);
+        });
+    </script>
+  </body>
+</html>
