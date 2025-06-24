@@ -1,0 +1,36 @@
+# Node modules
+node_modules/
+
+# Env files
+.env
+.env.*   # nếu bạn dùng .env.local, .env.production, ...
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store         # macOS
+Thumbs.db         # Windows
+
+# IDE / Editor
+.vscode/
+.idea/            # WebStorm/IntelliJ
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Build output
+dist/
+build/
+
+# Uploads (nếu dùng thư mục chứa ảnh hoặc file upload tạm)
+public/uploads/
+uploads/
+
+# Coverage reports (nếu test)
+coverage/
